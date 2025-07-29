@@ -7,10 +7,15 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private Image bgImage;
 
     [SerializeField] private Button startButton;
+    [SerializeField] private Button endButton;
 
     [SerializeField] private GameObject[] rulePanels;
+    [SerializeField] private GameObject[] tipTexts;
     private AudioManager audioManager;
+    private LabManager labManager; 
     private int currentRulePanelIndex = 0;
+    [SerializeField] private GameObject concludePanel;
+    [SerializeField] private GameObject finishPanel;
 
     private void Awake() {
         if (Instance == null) {
@@ -20,20 +25,24 @@ public class UIManager : MonoBehaviour {
             Destroy(gameObject);
             return;
         }
-        this.audioManager = AudioManager.Instance;
+        this.audioManager = FindObjectOfType<AudioManager>();
+        this.labManager = FindObjectOfType<LabManager>();
     }
 
     public void OnStartButtonClicked() {
         this.bgImage.gameObject.SetActive(false);
         this.startButton.gameObject.SetActive(false);
         this.ShowRulePanel(currentRulePanelIndex);
-        // this.audioManager.PlayRuleClip(currentRulePanelIndex);
+        this.audioManager.PlayRuleClip(currentRulePanelIndex);
     }
 
     public void OnRulePanelButtonClicked() {
         currentRulePanelIndex++;
         this.ShowRulePanel(currentRulePanelIndex);
-        // this.audioManager.PlayRuleClip(currentRulePanelIndex);
+        this.audioManager.PlayRuleClip(currentRulePanelIndex);
+        if (currentRulePanelIndex == this.audioManager.RuleAudioClips.Length) {
+            this.labManager.NextStep();
+        }
     }
 
     public void ShowRulePanel(int index) {
@@ -44,5 +53,28 @@ public class UIManager : MonoBehaviour {
         if (index >= 0 && index < rulePanels.Length) {
             currentRulePanelIndex = index;
         }
+    }
+
+    public void ShowTipText(int index) {
+        if (tipTexts == null) return;
+        for (int i = 0; i < tipTexts.Length; i++) {
+            tipTexts[i].SetActive(i == index);
+        }
+    }
+
+    public void ShowConcludePanel() {
+        this.concludePanel.SetActive(true);
+    }
+
+    public void ShowEndButton() {
+        this.audioManager.StopPlayAudio();
+        this.concludePanel.SetActive(false);
+        this.endButton.gameObject.SetActive(true);
+    }
+    
+    public void OnEndButtonClicked() {
+        this.endButton.gameObject.SetActive(false);
+        this.finishPanel.SetActive(true);
+        this.audioManager.PlayFinishClip();
     }
 }

@@ -8,6 +8,12 @@ public class AudioManager : MonoBehaviour {
     [SerializeField] private AudioClip startAudioClip;
     [SerializeField] private AudioClip[] ruleAudioClips;
     [SerializeField] private AudioClip[] tipAudioClips;
+    [SerializeField] private AudioClip concludeAudioClip;
+    [SerializeField] private AudioClip endAudioClip;
+    [SerializeField] private AudioClip finishAudioClip;
+    
+    public AudioClip[] RuleAudioClips { get { return ruleAudioClips; } }
+    public AudioClip[] TipAudioClips { get { return tipAudioClips; } }
 
     private void Awake() {
         if (Instance == null) {
@@ -21,19 +27,39 @@ public class AudioManager : MonoBehaviour {
     }
     
     public void PlayStartClip() {
-        this.PlaySound(startAudioClip);
+        this.PlaySound(this.startAudioClip);
+    }
+    
+    public void PlayConcluedeClip() {
+        this.PlaySound(this.concludeAudioClip);
+    }
+    
+    public void PlayEndClip() {
+        this.PlaySound(this.endAudioClip);
+    }
+
+    public void PlayFinishClip() {
+        this.PlaySound(this.finishAudioClip);
     }
 
     public void PlayRuleClip(int index) {
-        Debug.Log($"Playing rule clip {index}");
-        this.PlaySound(this.ruleAudioClips[index]);
+        if (ruleAudioClips != null && index >= 0 && index < ruleAudioClips.Length) {
+            this.PlaySound(this.ruleAudioClips[index]);
+        }
     }
 
     public void PlayTipClip(int index) {
-        this.PlaySound(this.tipAudioClips[index]);
+        if (tipAudioClips != null && index >= 0 && index < tipAudioClips.Length) {
+            this.PlaySound(this.tipAudioClips[index]);
+        }
     }
 
     private void PlaySound(AudioClip clip) {
+        this.audioSource.Stop();
         this.audioSource.PlayOneShot(clip);
+    }
+    
+    public void StopPlayAudio() {
+        this.audioSource.Stop();
     }
 }

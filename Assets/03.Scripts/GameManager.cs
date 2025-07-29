@@ -4,6 +4,7 @@ public class GameManager : MonoBehaviour {
     public static GameManager Instance { get; private set; }
     
     private AudioManager audioManager;
+    private LabManager labManager;
 
     private void Awake() {
         if (Instance == null) {
@@ -13,15 +14,23 @@ public class GameManager : MonoBehaviour {
             Destroy(gameObject);
             return;
         }
-        
-        this.audioManager = AudioManager.Instance;
+        this.audioManager = FindObjectOfType<AudioManager>();
+        this.labManager = FindObjectOfType<LabManager>();
     }
 
     private void Start() {
         Invoke(nameof(PlayStartAudio), 0.1f);
     }
 
+    private void Update() {
+        if (Input.GetKeyDown(KeyCode.N)) {
+            this.labManager.NextStep();
+        }
+    }
+
     private void PlayStartAudio() {
         this.audioManager.PlayStartClip();
     }
+    
+    
 }
