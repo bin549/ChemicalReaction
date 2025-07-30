@@ -1,0 +1,174 @@
+using UnityEngine;
+using UnityEngine.UI;
+using TMPro;
+using System.Collections.Generic;
+
+public class QuestionManager : MonoBehaviour {
+    public static QuestionManager Instance { get; private set; }
+    
+    [SerializeField] private GameObject questionBubblePrefab;
+    [SerializeField] private Transform spawnPoint;
+    [SerializeField] private Button submitButton;
+    [SerializeField] private QuestionOption[] questionOptions;
+    [SerializeField] private Button[] optionButtons;
+    [SerializeField] private float bubbleSpacing = 100f;
+    [SerializeField] private float regenerateInterval = 20f;
+    
+    private List<QuestionBubble> currentOptionBubbles = new List<QuestionBubble>();
+    private int currentQuestionIndex = 0;
+    private QuestionBubble selectedBubble;
+    private int selectedOptionIndex = -1;
+    private float nextRegenerateTime;
+    private bool isQuestionActive = false;
+    
+    private void Awake() {
+        if (Instance == null) {
+            Instance = this;
+            DontDestroyOnLoad(gameObject);
+        } else {
+            Destroy(gameObject);
+            return;
+        }
+    }
+    
+    private void Start() {
+        submitButton.onClick.AddListener(OnSubmitClicked);
+        for (int i = 0; i < optionButtons.Length; i++) {
+            int index = i;
+            optionButtons[i].onClick.AddListener(() => SelectOption(index));
+        }
+        ShowCurrentQuestion();
+    }
+    
+    private void Update() {
+        if (isQuestionActive && Time.time >= nextRegenerateTime) {
+            GenerateOptionBubbles();
+            nextRegenerateTime = Time.time + regenerateInterval;
+        }
+    }
+    
+    public void InitializeQuestion(int questionIndex) {
+        if (questionIndex < 0 || questionIndex >= questionOptions.Length) {
+            Debug.LogWarning("问题索引超出范围: " + questionIndex);
+            return;
+        }
+        isQuestionActive = false;
+        ClearCurrentBubbles();
+        currentQuestionIndex = questionIndex;
+        ShowCurrentQuestion();
+    }
+    
+    private void GenerateOptionBubbles() {
+        ClearCurrentBubbles();
+        if (currentQuestionIndex >= questionOptions.Length) return;
+        QuestionOption currentQuestion = questionOptions[currentQuestionIndex];
+        for (int i = 0; i < currentQuestion.options.Length; i++) {
+            Vector3 bubblePosition = spawnPoint.position + Vector3.right * (i * bubbleSpacing);
+            GameObject bubbleObj = Instantiate(questionBubblePrefab, bubblePosition, Quaternion.identity, spawnPoint);
+            QuestionBubble bubble = bubbleObj.GetComponent<QuestionBubble>();
+            QuestionData optionData = new QuestionData(i, new string[] { currentQuestion.options[i] }, 0);
+            bubble.SetQuestionData(optionData);
+            bubble.SetOptionIndex(i);
+            currentOptionBubbles.Add(bubble);
+        }
+    }
+    
+    private void ClearCurrentBubbles() {
+        foreach (QuestionBubble bubble in currentOptionBubbles) {
+            if (bubble != null && bubble.gameObject != null) {
+                Destroy(bubble.gameObject);
+            }
+        }
+        currentOptionBubbles.Clear();
+        selectedBubble = null;
+        if (selectedOptionIndex != -1) {
+        }
+    }
+    
+    private void ShowCurrentQuestion() {
+        if (currentQuestionIndex >= questionOptions.Length) {
+            AllQuestionsCompleted();
+            return;
+        }
+        QuestionOption currentQuestion = questionOptions[currentQuestionIndex];
+        for (int i = 0; i < optionButtons.Length && i < currentQuestion.options.Length; i++) {
+            TextMeshProUGUI buttonText = optionButtons[i].GetComponentInChildren<TextMeshProUGUI>();
+            if (buttonText != null) {
+                buttonText.text = currentQuestion.options[i];
+            }
+            optionButtons[i].gameObject.SetActive(true);
+            optionButtons[i].GetComponent<Image>().color = Color.white;
+        }
+        for (int i = currentQuestion.options.Length; i < optionButtons.Length; i++) {
+            optionButtons[i].gameObject.SetActive(false);
+        }
+        selectedOptionIndex = -1;
+        selectedBubble = null;
+        isQuestionActive = true;
+        GenerateOptionBubbles();
+        nextRegenerateTime = Time.time + regenerateInterval;
+    }
+    
+    public void SelectQuestion(QuestionBubble bubble) {
+        if (selectedBubble != null) {
+            selectedBubble.SetSelected(false);
+        }
+        
+        selectedBubble = bubble;
+        bubble.SetSelected(true);
+        selectedOptionIndex = bubble.GetOptionIndex();
+        
+        for (int i = 0; i < optionButtons.Length; i++) {
+            optionButtons[i].GetComponent<Image>().color = (i == selectedOptionIndex) ? Color.cyan : Color.white;
+        }
+    }
+    
+    private void SelectOption(int index) {
+        selectedOptionIndex = index;
+        foreach (QuestionBubble bubble in currentOptionBubbles) {
+            bubble.SetSelected(false);
+        }
+        if (index < currentOptionBubbles.Count) {
+            currentOptionBubbles[index].SetSelected(true);
+            selectedBubble = currentOptionBubbles[index];
+        }
+        for (int i = 0; i < optionButtons.Length; i++) {
+            optionButtons[i].GetComponent<Image>().color = (i == index) ? Color.cyan : Color.white;
+        }
+    }
+    
+    private void OnSubmitClicked() {
+        if (selectedOptionIndex == -1) return;
+        QuestionOption currentQuestion = questionOptions[currentQuestionIndex];
+        bool isCorrect = selectedOptionIndex == currentQuestion.correctAnswerIndex;
+        if (isCorrect) {
+            isQuestionActive = false;
+            ClearCurrentBubbles();
+            currentQuestionIndex++;
+            
+            Invoke(nameof(ShowNextQuestion), 0.5f);
+        } else {
+            selectedOptionIndex = -1;
+            selectedBubble = null;
+            for (int i = 0; i < optionButtons.Length; i++) {
+                optionButtons[i].GetComponent<Image>().color = Color.white;
+            }
+            foreach (QuestionBubble bubble in currentOptionBubbles) {
+                bubble.SetSelected(false);
+            }
+        }
+    }
+    
+    private void ShowNextQuestion() {
+        ShowCurrentQuestion();
+    }
+    
+    private void AllQuestionsCompleted() {
+        isQuestionActive = false;
+        ClearCurrentBubbles();
+        for (int i = 0; i < optionButtons.Length; i++) {
+            optionButtons[i].gameObject.SetActive(false);
+        }
+        submitButton.gameObject.SetActive(false);
+    }
+} 
