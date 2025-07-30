@@ -21,6 +21,7 @@ public class QuestionBubble : MonoBehaviour {
     private void Start() {
         bubbleButton.onClick.AddListener(OnBubbleClicked);
         questionManager = FindObjectOfType<QuestionManager>();
+        
         if (questionText != null) {
             questionText.color = normalTextColor;
         }
@@ -64,6 +65,7 @@ public class QuestionBubble : MonoBehaviour {
     public void SetSelected(bool selected) {
         isSelected = selected;
         backgroundImage.color = selected ? selectedColor : normalColor;
+        
         if (questionText != null) {
             questionText.color = selected ? selectedTextColor : normalTextColor;
         }

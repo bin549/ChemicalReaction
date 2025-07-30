@@ -1,6 +1,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
+using TMPro;
 
 public class UIManager : MonoBehaviour {
     [SerializeField] private Image bgImage;
@@ -8,16 +9,26 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private Button endButton;
     [SerializeField] private GameObject[] rulePanels;
     [SerializeField] private GameObject[] tipTexts;
+    [SerializeField] private GameObject concludePanel;
+    [SerializeField] private GameObject finishPanel;
+    [SerializeField] private TextMeshProUGUI timeText;
+    [SerializeField] private TextMeshProUGUI scoreText;
+    [SerializeField] private TextMeshProUGUI finalTimeText;
+    [SerializeField] private TextMeshProUGUI finalScoreText;
+    
     private AudioManager audioManager;
     private LabManager labManager; 
     private int currentRulePanelIndex = 0;
-    [SerializeField] private GameObject concludePanel;
-    [SerializeField] private GameObject finishPanel;
     public ErrorUI errorUI;
 
     private void Awake() {
         this.audioManager = FindObjectOfType<AudioManager>();
         this.labManager = FindObjectOfType<LabManager>();
+    }
+    
+    private void Start() {
+        UpdateTimeDisplay("00:00");
+        UpdateScoreDisplay(100);
     }
 
     public void OnStartButtonClicked() {
@@ -25,6 +36,10 @@ public class UIManager : MonoBehaviour {
         this.startButton.gameObject.SetActive(false);
         this.ShowRulePanel(currentRulePanelIndex);
         this.audioManager.PlayRuleClip(currentRulePanelIndex);
+        
+        if (GameManager.Instance != null) {
+            GameManager.Instance.StartTimer();
+        }
     }
 
     public void OnRulePanelButtonClicked() {
@@ -55,6 +70,17 @@ public class UIManager : MonoBehaviour {
     }
 
     public void ShowConcludePanel() {
+        if (GameManager.Instance != null) {
+            GameManager.Instance.StopTimer();
+            
+            if (finalTimeText != null) {
+                finalTimeText.text = "用时: " + GameManager.Instance.GetFormattedTime();
+            }
+            if (finalScoreText != null) {
+                finalScoreText.text = "得分: " + GameManager.Instance.GetScore();
+            }
+        }
+        
         this.concludePanel.SetActive(true);
     }
 
@@ -71,7 +97,23 @@ public class UIManager : MonoBehaviour {
     }
     
     public void OnFinishButtonClicked() {
+        if (GameManager.Instance != null) {
+            GameManager.Instance.ResetGame();
+        }
+        
         string sceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(sceneName);
+    }
+    
+    public void UpdateTimeDisplay(string timeString) {
+        if (timeText != null) {
+            timeText.text = timeString;
+        }
+    }
+    
+    public void UpdateScoreDisplay(int score) {
+        if (scoreText != null) {
+            scoreText.text = score.ToString();
+        }
     }
 }

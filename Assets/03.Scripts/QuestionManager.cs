@@ -41,6 +41,10 @@ public class QuestionManager : MonoBehaviour {
         if (isQuestionActive && Time.time >= nextRegenerateTime) {
             GenerateOptionBubbles();
             nextRegenerateTime = Time.time + regenerateInterval;
+            
+            if (GameManager.Instance != null) {
+                GameManager.Instance.DeductScore(5);
+            }
         }
     }
     
@@ -153,6 +157,11 @@ public class QuestionManager : MonoBehaviour {
         } else {
             this.uiManager.errorUI.gameObject.SetActive(true);
             this.audioManager.PlayErrorClip();
+            
+            if (GameManager.Instance != null) {
+                GameManager.Instance.DeductScore(5);
+            }
+            
             selectedOptionIndex = -1;
             selectedBubble = null;
             for (int i = 0; i < optionButtons.Length; i++) {
