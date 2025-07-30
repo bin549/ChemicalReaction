@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class TestTube : MonoBehaviour {
     private LabManager labManager;
+    private AudioManager audioManager;
     private QuestionManager questionManager;
     [Header("Step01")]
     [SerializeField] private Beaker breaker;
@@ -20,16 +21,19 @@ public class TestTube : MonoBehaviour {
         this.labManager = FindObjectOfType<LabManager>();
         this.meshRenderer = this.GetComponent<MeshRenderer>();
         this.questionManager = FindObjectOfType<QuestionManager>();
+        this.audioManager = FindObjectOfType<AudioManager>();
     }
 
     private void OnMouseDown() {
         if (this.breaker.pickupBeaker.activeSelf && !this.isFill) {
+            this.audioManager.PlayPourClip();
             this.meshRenderer.enabled = false;
             this.breaker.pickupBeaker.gameObject.SetActive(false);
             this.pourBeakerAnim.SetActive(true); 
             Invoke(nameof(ResetBeaker), 1.2f);
         }
         if (this.tweezer.pickupAluminiumHand.activeSelf) {
+            this.audioManager.PlayCollideClip();
             this.tweezer.pickupAluminiumHand.SetActive(false);
             this.tweezer.pickupTweezer.SetActive(true);
             this.aluminiumFall.SetActive(true);
@@ -46,6 +50,7 @@ public class TestTube : MonoBehaviour {
             this.match.pickupWoodStickHand.transform.position = woodStickHandTransform.position;
             this.match.IgnoreWoodStick();
             this.labManager.stickTestCount++;
+            this.audioManager.PlayIgniteClip();
             if (this.labManager.stickTestCount == 2) {
                 this.labManager.isStep03Done = true;
                 this.labManager.NextStep();

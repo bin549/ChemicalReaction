@@ -2652,6 +2652,11 @@ MonoBehaviour:
   clickAudioClip: {fileID: 8300000, guid: 0ace14ec8c86b43cb81906cd1ab9aa48, type: 3}
   passAudioClip: {fileID: 8300000, guid: f4a92b46eb8fe49b784bf9cb842d88c3, type: 3}
   errorAudioClip: {fileID: 8300000, guid: 7311fc86985c048e99c7f2856b1295e4, type: 3}
+  matchAudioClip: {fileID: 8300000, guid: 7991e2e427ea74a4c92868f685d00698, type: 3}
+  stickAudioClip: {fileID: 8300000, guid: affed93c56d7f43cf8df6cfbd1bdd8b7, type: 3}
+  igniteAudioClip: {fileID: 8300000, guid: 2efb0b2d3289a478aac494559cacb0dc, type: 3}
+  collideAudioClip: {fileID: 8300000, guid: d7268877e3b7b4e46b12f48ef58e0b78, type: 3}
+  pourAudioClip: {fileID: 8300000, guid: efad3a24c8613468997c8e2d0e08c3e2, type: 3}
 --- !u!4 &520415388
 Transform:
   m_ObjectHideFlags: 0

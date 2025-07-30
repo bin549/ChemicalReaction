@@ -12,6 +12,11 @@ public class AudioManager : MonoBehaviour {
     [SerializeField] private AudioClip clickAudioClip;
     [SerializeField] private AudioClip passAudioClip;
     [SerializeField] private AudioClip errorAudioClip;
+    [SerializeField] private AudioClip matchAudioClip;
+    [SerializeField] private AudioClip stickAudioClip;
+    [SerializeField] private AudioClip igniteAudioClip;
+    [SerializeField] private AudioClip collideAudioClip;
+    [SerializeField] private AudioClip pourAudioClip;
     
     public AudioClip[] RuleAudioClips { get { return ruleAudioClips; } }
     public AudioClip[] TipAudioClips { get { return tipAudioClips; } }
@@ -67,5 +72,25 @@ public class AudioManager : MonoBehaviour {
 
     public void PlayErrorClip() {
         this.PlaySound(this.errorAudioClip);
+    }
+    
+    public void PlayMatchClip() {
+        this.PlaySound(this.matchAudioClip);
+    }
+
+    public void PlayStickClip() {
+        this.PlaySound(this.stickAudioClip);
+    }
+
+    public void PlayIgniteClip() {
+        this.PlaySound(this.igniteAudioClip);
+    }
+
+    public void PlayCollideClip() {
+        this.PlaySound(this.collideAudioClip);
+    }
+
+    public void PlayPourClip() {
+        this.PlaySound(this.pourAudioClip);
     }
 }
