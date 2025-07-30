@@ -1,11 +1,15 @@
 using UnityEngine;
 
 public class TestTube : MonoBehaviour {
+    private LabManager labManager;
+    [Header("Step01")]
     [SerializeField] private Beaker breaker;
     private MeshRenderer meshRenderer;
     public GameObject pourBeakerAnim;
     private bool isFill;
-    private LabManager labManager;
+    [Header("Step02")]
+    [SerializeField] private Tweezer tweezer;
+    public GameObject aluminiumFall;
 
     private void Awake() {
         this.labManager = FindObjectOfType<LabManager>();
@@ -18,6 +22,12 @@ public class TestTube : MonoBehaviour {
             this.breaker.pickupBeaker.gameObject.SetActive(false);
             this.pourBeakerAnim.SetActive(true); 
             Invoke(nameof(ResetBeaker), 1.2f);
+        }
+        if (this.tweezer.pickupAluminiumHand.activeSelf) {
+            this.tweezer.pickupAluminiumHand.SetActive(false);
+            this.tweezer.pickupTweezer.SetActive(true);
+            this.aluminiumFall.SetActive(true);
+            this.labManager.NextStep();
         }
     }
 
