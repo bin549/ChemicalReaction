@@ -2,6 +2,7 @@ using UnityEngine;
 
 public class TestTube : MonoBehaviour {
     private LabManager labManager;
+    private QuestionManager questionManager;
     [Header("Step01")]
     [SerializeField] private Beaker breaker;
     private MeshRenderer meshRenderer;
@@ -14,6 +15,7 @@ public class TestTube : MonoBehaviour {
     private void Awake() {
         this.labManager = FindObjectOfType<LabManager>();
         this.meshRenderer = this.GetComponent<MeshRenderer>();
+        this.questionManager = FindObjectOfType<QuestionManager>();
     }
 
     private void OnMouseDown() {
@@ -28,6 +30,13 @@ public class TestTube : MonoBehaviour {
             this.tweezer.pickupTweezer.SetActive(true);
             this.aluminiumFall.SetActive(true);
             this.labManager.NextStep();
+            this.labManager.aluminiumFallCount++;
+            if (this.labManager.aluminiumFallCount == 2) {
+                this.labManager.isStep02Done = true;
+                this.tweezer.ShowTweezer();
+                this.tweezer.pickupTweezer.SetActive(false);
+                this.questionManager.InitializeQuestion(this.labManager.CurrentStepIndex);
+            }
         }
     }
 

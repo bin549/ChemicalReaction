@@ -5,6 +5,7 @@ using System.Collections.Generic;
 
 public class QuestionManager : MonoBehaviour {
     public static QuestionManager Instance { get; private set; }
+    private LabManager labManager;
     
     [SerializeField] private GameObject questionBubblePrefab;
     [SerializeField] private Transform spawnPoint;
@@ -29,6 +30,7 @@ public class QuestionManager : MonoBehaviour {
             Destroy(gameObject);
             return;
         }
+        this.labManager = FindObjectOfType<LabManager>();
     }
     
     private void Start() {
@@ -37,7 +39,6 @@ public class QuestionManager : MonoBehaviour {
             int index = i;
             optionButtons[i].onClick.AddListener(() => SelectOption(index));
         }
-        ShowCurrentQuestion();
     }
     
     private void Update() {
@@ -55,6 +56,7 @@ public class QuestionManager : MonoBehaviour {
         isQuestionActive = false;
         ClearCurrentBubbles();
         currentQuestionIndex = questionIndex;
+        this.submitButton.gameObject.SetActive(true);
         ShowCurrentQuestion();
     }
     
@@ -145,8 +147,8 @@ public class QuestionManager : MonoBehaviour {
             isQuestionActive = false;
             ClearCurrentBubbles();
             currentQuestionIndex++;
-            
-            Invoke(nameof(ShowNextQuestion), 0.5f);
+            this.labManager.NextStep();
+            Invoke(nameof(ShowNextQuestion), 0.0f);
         } else {
             selectedOptionIndex = -1;
             selectedBubble = null;
