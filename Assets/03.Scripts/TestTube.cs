@@ -14,6 +14,7 @@ public class TestTube : MonoBehaviour {
     [Header("Step03")] 
     [SerializeField] private Match match;
     [SerializeField] private Transform woodStickHandTransform;
+    [SerializeField] private GameObject liquidPrefab;
 
     private void Awake() {
         this.labManager = FindObjectOfType<LabManager>();
@@ -58,5 +59,6 @@ public class TestTube : MonoBehaviour {
         this.breaker.pickupBeaker.gameObject.SetActive(true);
         this.pourBeakerAnim.SetActive(false); 
         this.labManager.IncrementTestTubeCount();
+        this.liquidPrefab.SetActive(true);
     }
 }
