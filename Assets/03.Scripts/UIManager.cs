@@ -10,7 +10,6 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private Button endButton;
 
     [SerializeField] private GameObject[] rulePanels;
-    [SerializeField] private GameObject questionSystemPanel;
     [SerializeField] private GameObject[] tipTexts;
     private AudioManager audioManager;
     private LabManager labManager; 
@@ -69,7 +68,7 @@ public class UIManager : MonoBehaviour {
     }
 
     public void ShowEndButton() {
-        this.audioManager.StopPlayAudio();
+        this.audioManager.PlayEndClip();
         this.concludePanel.SetActive(false);
         this.endButton.gameObject.SetActive(true);
     }
@@ -79,23 +78,12 @@ public class UIManager : MonoBehaviour {
         this.finishPanel.SetActive(true);
         this.audioManager.PlayFinishClip();
     }
-
-    public void ShowQuestionSystem() {
-        if (questionSystemPanel != null) {
-            questionSystemPanel.SetActive(true);
-        }
-    }
-
-    public void HideQuestionSystem() {
-        if (questionSystemPanel != null) {
-            questionSystemPanel.SetActive(false);
-        }
-    }
-
-    public void ToggleQuestionSystem() {
-        if (questionSystemPanel != null) {
-            questionSystemPanel.SetActive(!questionSystemPanel.activeSelf);
-        }
-    }
     
+    public void OnFinishButtonClicked() {
+        this.finishPanel.SetActive(false);
+        this.bgImage.gameObject.SetActive(true);
+        this.startButton.gameObject.SetActive(true);
+        this.audioManager.PlayStartClip();
+        this.labManager.ResetStatus();
+    }
 }

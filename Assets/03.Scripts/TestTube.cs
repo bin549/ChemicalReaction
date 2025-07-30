@@ -47,6 +47,7 @@ public class TestTube : MonoBehaviour {
             if (this.labManager.stickTestCount == 2) {
                 this.labManager.isStep03Done = true;
                 this.labManager.NextStep();
+                this.match.pickupWoodStickHand.SetActive(false);
                 this.questionManager.InitializeQuestion(this.labManager.CurrentStepIndex+1);
             }
         }

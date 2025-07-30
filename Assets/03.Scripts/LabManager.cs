@@ -59,4 +59,10 @@ public class LabManager : MonoBehaviour {
             this.resetArea.SetActive(true); 
         }
     }
+
+    public void ResetStatus() {
+        isStep01Done = false;
+        isStep02Done = false;
+        isStep03Done = false;
+    }
 }
