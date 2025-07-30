@@ -11,8 +11,12 @@ public class LabManager : MonoBehaviour {
     private int fillTestTubeCount = 0;
     public bool isStep01Done = false;
     [SerializeField] private GameObject resetArea;
+    [Header("Step 02")]
     public int aluminiumFallCount = 0;
     public bool isStep02Done = false;
+    [Header("Step 03")]
+    public int stickTestCount = 0;
+    public bool isStep03Done = false;
 
     public int CurrentStepIndex => currentStepIndex;
     

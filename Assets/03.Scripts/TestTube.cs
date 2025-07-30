@@ -11,6 +11,9 @@ public class TestTube : MonoBehaviour {
     [Header("Step02")]
     [SerializeField] private Tweezer tweezer;
     public GameObject aluminiumFall;
+    [Header("Step03")] 
+    [SerializeField] private Match match;
+    [SerializeField] private Transform woodStickHandTransform;
 
     private void Awake() {
         this.labManager = FindObjectOfType<LabManager>();
@@ -35,7 +38,16 @@ public class TestTube : MonoBehaviour {
                 this.labManager.isStep02Done = true;
                 this.tweezer.ShowTweezer();
                 this.tweezer.pickupTweezer.SetActive(false);
-                this.questionManager.InitializeQuestion(this.labManager.CurrentStepIndex);
+                this.questionManager.InitializeQuestion(this.labManager.CurrentStepIndex+1);
+            }
+        }
+        if (this.match.pickupWoodStickHand.activeSelf) {
+            this.match.pickupWoodStickHand.transform.position = woodStickHandTransform.position;
+            this.labManager.stickTestCount++;
+            if (this.labManager.stickTestCount == 2) {
+                this.labManager.isStep03Done = true;
+                this.labManager.NextStep();
+                this.questionManager.InitializeQuestion(this.labManager.CurrentStepIndex+1);
             }
         }
     }

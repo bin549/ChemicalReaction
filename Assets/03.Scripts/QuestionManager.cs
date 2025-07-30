@@ -49,21 +49,28 @@ public class QuestionManager : MonoBehaviour {
     }
     
     public void InitializeQuestion(int questionIndex) {
-        if (questionIndex < 0 || questionIndex >= questionOptions.Length) {
-            Debug.LogWarning("问题索引超出范围: " + questionIndex);
-            return;
-        }
         isQuestionActive = false;
-        ClearCurrentBubbles();
+        this.ClearCurrentBubbles();
         currentQuestionIndex = questionIndex;
         this.submitButton.gameObject.SetActive(true);
-        ShowCurrentQuestion();
+        this.ShowCurrentQuestion();
+    }
+    
+    private QuestionOption GetQuestionByIndex(int questionIndex) {
+        for (int i = 0; i < questionOptions.Length; i++) {
+            if (questionOptions[i].questionIndex == questionIndex) {
+                return questionOptions[i];
+            }
+        }
+        return null;
     }
     
     private void GenerateOptionBubbles() {
         ClearCurrentBubbles();
-        if (currentQuestionIndex >= questionOptions.Length) return;
-        QuestionOption currentQuestion = questionOptions[currentQuestionIndex];
+        
+        QuestionOption currentQuestion = GetQuestionByIndex(currentQuestionIndex);
+        if (currentQuestion == null) return;
+        
         for (int i = 0; i < currentQuestion.options.Length; i++) {
             Vector3 bubblePosition = spawnPoint.position + Vector3.right * (i * bubbleSpacing);
             GameObject bubbleObj = Instantiate(questionBubblePrefab, bubblePosition, Quaternion.identity, spawnPoint);
@@ -87,12 +94,9 @@ public class QuestionManager : MonoBehaviour {
         }
     }
     
-    private void ShowCurrentQuestion() {
-        if (currentQuestionIndex >= questionOptions.Length) {
-            AllQuestionsCompleted();
-            return;
-        }
-        QuestionOption currentQuestion = questionOptions[currentQuestionIndex];
+    private void ShowCurrentQuestion() { 
+        QuestionOption currentQuestion = GetQuestionByIndex(currentQuestionIndex);
+        if (currentQuestion == null) return;
         for (int i = 0; i < optionButtons.Length && i < currentQuestion.options.Length; i++) {
             TextMeshProUGUI buttonText = optionButtons[i].GetComponentInChildren<TextMeshProUGUI>();
             if (buttonText != null) {
@@ -141,7 +145,10 @@ public class QuestionManager : MonoBehaviour {
     
     private void OnSubmitClicked() {
         if (selectedOptionIndex == -1) return;
-        QuestionOption currentQuestion = questionOptions[currentQuestionIndex];
+        
+        QuestionOption currentQuestion = GetQuestionByIndex(currentQuestionIndex);
+        if (currentQuestion == null) return;
+        
         bool isCorrect = selectedOptionIndex == currentQuestion.correctAnswerIndex;
         if (isCorrect) {
             isQuestionActive = false;
