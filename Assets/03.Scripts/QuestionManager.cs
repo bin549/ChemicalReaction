@@ -4,7 +4,6 @@ using TMPro;
 using System.Collections.Generic;
 
 public class QuestionManager : MonoBehaviour {
-    public static QuestionManager Instance { get; private set; }
     private LabManager labManager;
     
     [SerializeField] private GameObject questionBubblePrefab;
@@ -23,13 +22,6 @@ public class QuestionManager : MonoBehaviour {
     private bool isQuestionActive = false;
     
     private void Awake() {
-        if (Instance == null) {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        } else {
-            Destroy(gameObject);
-            return;
-        }
         this.labManager = FindObjectOfType<LabManager>();
     }
     
@@ -67,10 +59,8 @@ public class QuestionManager : MonoBehaviour {
     
     private void GenerateOptionBubbles() {
         ClearCurrentBubbles();
-        
         QuestionOption currentQuestion = GetQuestionByIndex(currentQuestionIndex);
         if (currentQuestion == null) return;
-        
         for (int i = 0; i < currentQuestion.options.Length; i++) {
             Vector3 bubblePosition = spawnPoint.position + Vector3.right * (i * bubbleSpacing);
             GameObject bubbleObj = Instantiate(questionBubblePrefab, bubblePosition, Quaternion.identity, spawnPoint);
@@ -84,7 +74,7 @@ public class QuestionManager : MonoBehaviour {
     
     private void ClearCurrentBubbles() {
         foreach (QuestionBubble bubble in currentOptionBubbles) {
-            if (bubble != null && bubble.gameObject != null) {
+            if (bubble && bubble.gameObject) {
                 Destroy(bubble.gameObject);
             }
         }
@@ -119,11 +109,9 @@ public class QuestionManager : MonoBehaviour {
         if (selectedBubble != null) {
             selectedBubble.SetSelected(false);
         }
-        
         selectedBubble = bubble;
         bubble.SetSelected(true);
         selectedOptionIndex = bubble.GetOptionIndex();
-        
         for (int i = 0; i < optionButtons.Length; i++) {
             optionButtons[i].GetComponent<Image>().color = (i == selectedOptionIndex) ? Color.cyan : Color.white;
         }
@@ -145,15 +133,16 @@ public class QuestionManager : MonoBehaviour {
     
     private void OnSubmitClicked() {
         if (selectedOptionIndex == -1) return;
-        
         QuestionOption currentQuestion = GetQuestionByIndex(currentQuestionIndex);
         if (currentQuestion == null) return;
-        
         bool isCorrect = selectedOptionIndex == currentQuestion.correctAnswerIndex;
         if (isCorrect) {
             isQuestionActive = false;
             ClearCurrentBubbles();
-            currentQuestionIndex++;
+            if (this.currentQuestionIndex == 13) {
+                this.labManager.HideWoodStick();
+            }
+            this.currentQuestionIndex++;
             this.labManager.NextStep();
             Invoke(nameof(ShowNextQuestion), 0.0f);
         } else {
@@ -170,14 +159,5 @@ public class QuestionManager : MonoBehaviour {
     
     private void ShowNextQuestion() {
         ShowCurrentQuestion();
-    }
-    
-    private void AllQuestionsCompleted() {
-        isQuestionActive = false;
-        ClearCurrentBubbles();
-        for (int i = 0; i < optionButtons.Length; i++) {
-            optionButtons[i].gameObject.SetActive(false);
-        }
-        submitButton.gameObject.SetActive(false);
     }
 } 

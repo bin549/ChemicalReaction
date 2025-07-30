@@ -44,11 +44,11 @@ public class TestTube : MonoBehaviour {
         }
         if (this.match.pickupWoodStickHand.activeSelf) {
             this.match.pickupWoodStickHand.transform.position = woodStickHandTransform.position;
+            this.match.IgnoreWoodStick();
             this.labManager.stickTestCount++;
             if (this.labManager.stickTestCount == 2) {
                 this.labManager.isStep03Done = true;
                 this.labManager.NextStep();
-                this.match.pickupWoodStickHand.SetActive(false);
                 this.questionManager.InitializeQuestion(this.labManager.CurrentStepIndex+1);
             }
         }

@@ -1,8 +1,6 @@
 using UnityEngine;
 
 public class LabManager : MonoBehaviour {
-    public static LabManager Instance { get; private set; }
-
     private AudioManager audioManager;
     private UIManager uiManager;
     private int currentStepIndex = -1;
@@ -17,6 +15,7 @@ public class LabManager : MonoBehaviour {
     [Header("Step 03")]
     public int stickTestCount = 0;
     public bool isStep03Done = false;
+    public Match match;
 
     public int CurrentStepIndex => currentStepIndex;
     
@@ -26,15 +25,9 @@ public class LabManager : MonoBehaviour {
     }
 
     private void Awake() {
-        if (Instance == null) {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        } else {
-            Destroy(gameObject);
-            return;
-        }
         this.audioManager = FindObjectOfType<AudioManager>();
         this.uiManager = FindObjectOfType<UIManager>();
+        this.match = FindObjectOfType<Match>(true);
     }
 
     public void NextStep() {
@@ -60,9 +53,7 @@ public class LabManager : MonoBehaviour {
         }
     }
 
-    public void ResetStatus() {
-        isStep01Done = false;
-        isStep02Done = false;
-        isStep03Done = false;
+    public void HideWoodStick() {
+        this.match.pickupWoodStickHand.SetActive(false);
     }
 }

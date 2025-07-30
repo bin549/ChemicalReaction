@@ -328,7 +328,7 @@ Transform:
   m_GameObject: {fileID: 74715175}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -5.58, y: 1.157, z: -13.615263}
+  m_LocalPosition: {x: -5.575, y: 1.157, z: -13.615263}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1216,6 +1216,7 @@ MonoBehaviour:
   isStep02Done: 0
   stickTestCount: 0
   isStep03Done: 0
+  match: {fileID: 6042154291559198925}
 --- !u!4 &205715053
 Transform:
   m_ObjectHideFlags: 0
@@ -3417,10 +3418,15 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5199129364362785769, guid: 70e972211d63142dc8d6e4b684054526,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.1
+      objectReference: {fileID: 0}
     - target: {fileID: 7810271077740221581, guid: 70e972211d63142dc8d6e4b684054526,
         type: 3}
       propertyPath: m_Name
-      value: BurnerFlameMedium
+      value: BurnerFlameNormal
       objectReference: {fileID: 0}
     - target: {fileID: 7810271077740221581, guid: 70e972211d63142dc8d6e4b684054526,
         type: 3}
@@ -4283,6 +4289,12 @@ Transform:
   - {fileID: 74715176}
   m_Father: {fileID: 17412754}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &866042728 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7810271077740221581, guid: 70e972211d63142dc8d6e4b684054526,
+    type: 3}
+  m_PrefabInstance: {fileID: 667504788}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &885316509
 GameObject:
   m_ObjectHideFlags: 0
@@ -5024,17 +5036,17 @@ PrefabInstance:
     - target: {fileID: 3180160664400015058, guid: 3a8fbde0fa04948f291bd4e89f1d2a1d,
         type: 3}
       propertyPath: m_LocalPosition.x
-      value: 0.0959
+      value: 0.098
       objectReference: {fileID: 0}
     - target: {fileID: 3180160664400015058, guid: 3a8fbde0fa04948f291bd4e89f1d2a1d,
         type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.0251
+      value: -0.029
       objectReference: {fileID: 0}
     - target: {fileID: 3180160664400015058, guid: 3a8fbde0fa04948f291bd4e89f1d2a1d,
         type: 3}
       propertyPath: m_LocalPosition.z
-      value: 0.009
+      value: 0.011
       objectReference: {fileID: 0}
     - target: {fileID: 3180160664400015058, guid: 3a8fbde0fa04948f291bd4e89f1d2a1d,
         type: 3}
@@ -5421,7 +5433,7 @@ Transform:
   m_GameObject: {fileID: 1107439182}
   serializedVersion: 2
   m_LocalRotation: {x: -0.7071068, y: 0, z: -0, w: 0.7071068}
-  m_LocalPosition: {x: -5.55, y: 1.157, z: -13.615263}
+  m_LocalPosition: {x: -5.545, y: 1.157, z: -13.615263}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -12511,6 +12523,12 @@ Transform:
   - {fileID: 8511202081857261335}
   m_Father: {fileID: 17412754}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1511051465 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 3155387946160339246, guid: 81f572a8dd4d74f189bb99915df1e289,
+    type: 3}
+  m_PrefabInstance: {fileID: 1703129937}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1518941019
 GameObject:
   m_ObjectHideFlags: 0
@@ -18071,7 +18089,17 @@ PrefabInstance:
     - target: {fileID: 3155387946160339246, guid: 81f572a8dd4d74f189bb99915df1e289,
         type: 3}
       propertyPath: m_Name
-      value: BurnerFlameFull
+      value: BurnerFlameIgnite
+      objectReference: {fileID: 0}
+    - target: {fileID: 3155387946160339246, guid: 81f572a8dd4d74f189bb99915df1e289,
+        type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5062898262678396938, guid: 81f572a8dd4d74f189bb99915df1e289,
+        type: 3}
+      propertyPath: InitialModule.startSize.scalar
+      value: 0.1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -18501,7 +18529,7 @@ PrefabInstance:
     - target: {fileID: 919132149155446097, guid: 13ee296a728ed4329b7aa3817ea7144f,
         type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2147550530737208110, guid: 13ee296a728ed4329b7aa3817ea7144f,
         type: 3}
@@ -19500,11 +19528,11 @@ PrefabInstance:
     - targetCorrespondingSourceObject: {fileID: 5157616578019866213, guid: b1c9d3af8e08644d48d06b86d21095e9,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 1703129938}
+      addedObject: {fileID: 667504789}
     - targetCorrespondingSourceObject: {fileID: 5157616578019866213, guid: b1c9d3af8e08644d48d06b86d21095e9,
         type: 3}
       insertIndex: -1
-      addedObject: {fileID: 667504789}
+      addedObject: {fileID: 1703129938}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: b1c9d3af8e08644d48d06b86d21095e9, type: 3}
 --- !u!4 &2034277185 stripped
@@ -21480,6 +21508,8 @@ MonoBehaviour:
   matchStick: {fileID: 3696171736733145823}
   pickupMatchStickHand: {fileID: 4798628309314526563}
   pickupWoodStickHand: {fileID: 1482949471}
+  pickupWoodStickFireParticleIgnite: {fileID: 866042728}
+  pickupWoodStickFireParticleNormal: {fileID: 1511051465}
 --- !u!65 &6042154291559198926
 BoxCollider:
   m_ObjectHideFlags: 0

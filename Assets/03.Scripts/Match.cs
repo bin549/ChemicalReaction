@@ -4,6 +4,8 @@ public class Match : MonoBehaviour {
     [SerializeField] private GameObject matchStick;
     public GameObject pickupMatchStickHand;
     public GameObject pickupWoodStickHand;
+    public GameObject pickupWoodStickFireParticleIgnite;
+    public GameObject pickupWoodStickFireParticleNormal;
 
     private void OnMouseDown() {
         PickupMatchStick();
@@ -17,5 +19,10 @@ public class Match : MonoBehaviour {
     public void PickupWoodStick() {
         this.pickupMatchStickHand.SetActive(false);
         this.pickupWoodStickHand.SetActive(true);
+    }
+
+    public void IgnoreWoodStick() {
+        this.pickupWoodStickFireParticleIgnite.SetActive(true);
+        this.pickupWoodStickFireParticleNormal.SetActive(false);
     }
 }

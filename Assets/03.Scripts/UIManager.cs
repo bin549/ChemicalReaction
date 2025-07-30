@@ -1,14 +1,11 @@
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 
 public class UIManager : MonoBehaviour {
-    public static UIManager Instance { get; private set; }
-    
     [SerializeField] private Image bgImage;
-
     [SerializeField] private Button startButton;
     [SerializeField] private Button endButton;
-
     [SerializeField] private GameObject[] rulePanels;
     [SerializeField] private GameObject[] tipTexts;
     private AudioManager audioManager;
@@ -18,13 +15,6 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private GameObject finishPanel;
 
     private void Awake() {
-        if (Instance == null) {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        } else {
-            Destroy(gameObject);
-            return;
-        }
         this.audioManager = FindObjectOfType<AudioManager>();
         this.labManager = FindObjectOfType<LabManager>();
     }
@@ -80,10 +70,7 @@ public class UIManager : MonoBehaviour {
     }
     
     public void OnFinishButtonClicked() {
-        this.finishPanel.SetActive(false);
-        this.bgImage.gameObject.SetActive(true);
-        this.startButton.gameObject.SetActive(true);
-        this.audioManager.PlayStartClip();
-        this.labManager.ResetStatus();
+        string sceneName = SceneManager.GetActiveScene().name;
+        SceneManager.LoadScene(sceneName);
     }
 }

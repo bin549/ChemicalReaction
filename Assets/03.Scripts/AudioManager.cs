@@ -1,8 +1,6 @@
 using UnityEngine;
 
 public class AudioManager : MonoBehaviour {
-    public static AudioManager Instance { get; private set; }
-    
     private AudioSource audioSource;
     
     [SerializeField] private AudioClip startAudioClip;
@@ -16,13 +14,6 @@ public class AudioManager : MonoBehaviour {
     public AudioClip[] TipAudioClips { get { return tipAudioClips; } }
 
     private void Awake() {
-        if (Instance == null) {
-            Instance = this;
-            DontDestroyOnLoad(gameObject);
-        } else {
-            Destroy(gameObject);
-            return;
-        }
         this.audioSource = this.GetComponent<AudioSource>();
     }
     
