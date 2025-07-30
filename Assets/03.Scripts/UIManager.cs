@@ -42,6 +42,7 @@ public class UIManager : MonoBehaviour {
         this.audioManager.PlayRuleClip(currentRulePanelIndex);
         if (currentRulePanelIndex == this.audioManager.RuleAudioClips.Length) {
             this.labManager.NextStep();
+            this.labManager.IsWorking = true;
         }
     }
 
