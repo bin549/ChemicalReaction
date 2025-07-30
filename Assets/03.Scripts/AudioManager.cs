@@ -9,6 +9,9 @@ public class AudioManager : MonoBehaviour {
     [SerializeField] private AudioClip concludeAudioClip;
     [SerializeField] private AudioClip endAudioClip;
     [SerializeField] private AudioClip finishAudioClip;
+    [SerializeField] private AudioClip clickAudioClip;
+    [SerializeField] private AudioClip passAudioClip;
+    [SerializeField] private AudioClip errorAudioClip;
     
     public AudioClip[] RuleAudioClips { get { return ruleAudioClips; } }
     public AudioClip[] TipAudioClips { get { return tipAudioClips; } }
@@ -52,5 +55,17 @@ public class AudioManager : MonoBehaviour {
     
     public void StopPlayAudio() {
         this.audioSource.Stop();
+    }
+
+    public void PlayClickClip() {
+        this.PlaySound(this.clickAudioClip);
+    }
+
+    public void PlayPassClip() {
+        this.PlaySound(this.passAudioClip);
+    }
+
+    public void PlayErrorClip() {
+        this.PlaySound(this.errorAudioClip);
     }
 }

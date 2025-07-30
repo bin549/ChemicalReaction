@@ -36,7 +36,11 @@ public class LabManager : MonoBehaviour {
         if (currentStepIndex == this.audioManager.TipAudioClips.Length) {
             this.OnLabConclude();
             return;
-        }
+        } 
+        Invoke(nameof(PlayTipSound), 0.2f);
+    }
+
+    private void PlayTipSound() {
         this.audioManager.PlayTipClip(currentStepIndex);
     }
 

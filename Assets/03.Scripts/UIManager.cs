@@ -13,6 +13,7 @@ public class UIManager : MonoBehaviour {
     private int currentRulePanelIndex = 0;
     [SerializeField] private GameObject concludePanel;
     [SerializeField] private GameObject finishPanel;
+    public ErrorUI errorUI;
 
     private void Awake() {
         this.audioManager = FindObjectOfType<AudioManager>();

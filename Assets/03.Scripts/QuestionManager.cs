@@ -5,6 +5,8 @@ using System.Collections.Generic;
 
 public class QuestionManager : MonoBehaviour {
     private LabManager labManager;
+    private UIManager uiManager;
+    private AudioManager audioManager;
     
     [SerializeField] private GameObject questionBubblePrefab;
     [SerializeField] private Transform spawnPoint;
@@ -23,6 +25,8 @@ public class QuestionManager : MonoBehaviour {
     
     private void Awake() {
         this.labManager = FindObjectOfType<LabManager>();
+        this.uiManager = FindObjectOfType<UIManager>();
+        this.audioManager = FindObjectOfType<AudioManager>();
     }
     
     private void Start() {
@@ -78,8 +82,8 @@ public class QuestionManager : MonoBehaviour {
                 Destroy(bubble.gameObject);
             }
         }
-        currentOptionBubbles.Clear();
-        selectedBubble = null;
+        this.currentOptionBubbles.Clear();
+        this.selectedBubble = null;
         if (selectedOptionIndex != -1) {
         }
     }
@@ -98,11 +102,11 @@ public class QuestionManager : MonoBehaviour {
         for (int i = currentQuestion.options.Length; i < optionButtons.Length; i++) {
             optionButtons[i].gameObject.SetActive(false);
         }
-        selectedOptionIndex = -1;
-        selectedBubble = null;
-        isQuestionActive = true;
-        GenerateOptionBubbles();
-        nextRegenerateTime = Time.time + regenerateInterval;
+        this.selectedOptionIndex = -1;
+        this.selectedBubble = null;
+        this.isQuestionActive = true;
+        this.GenerateOptionBubbles();
+        this.nextRegenerateTime = Time.time + regenerateInterval;
     }
     
     public void SelectQuestion(QuestionBubble bubble) {
@@ -137,8 +141,9 @@ public class QuestionManager : MonoBehaviour {
         if (currentQuestion == null) return;
         bool isCorrect = selectedOptionIndex == currentQuestion.correctAnswerIndex;
         if (isCorrect) {
-            isQuestionActive = false;
-            ClearCurrentBubbles();
+            this.audioManager.PlayPassClip(); 
+            this.isQuestionActive = false;
+            this.ClearCurrentBubbles();
             if (this.currentQuestionIndex == 13) {
                 this.labManager.HideWoodStick();
             }
@@ -146,6 +151,8 @@ public class QuestionManager : MonoBehaviour {
             this.labManager.NextStep();
             Invoke(nameof(ShowNextQuestion), 0.0f);
         } else {
+            this.uiManager.errorUI.gameObject.SetActive(true);
+            this.audioManager.PlayErrorClip();
             selectedOptionIndex = -1;
             selectedBubble = null;
             for (int i = 0; i < optionButtons.Length; i++) {
@@ -158,6 +165,6 @@ public class QuestionManager : MonoBehaviour {
     }
     
     private void ShowNextQuestion() {
-        ShowCurrentQuestion();
+        this.ShowCurrentQuestion();
     }
 } 
