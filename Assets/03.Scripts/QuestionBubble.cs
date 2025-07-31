@@ -19,18 +19,16 @@ public class QuestionBubble : MonoBehaviour {
     private QuestionManager questionManager;
     
     private void Start() {
-        bubbleButton.onClick.AddListener(OnBubbleClicked);
-        questionManager = FindObjectOfType<QuestionManager>();
-        
+        this.bubbleButton.onClick.AddListener(OnBubbleClicked);
+        this.questionManager = FindObjectOfType<QuestionManager>();
         if (questionText != null) {
-            questionText.color = normalTextColor;
+            this.questionText.color = normalTextColor;
         }
     }
     
     private void Update() {
         if (movementEnabled) {
             transform.Translate(Vector3.left * moveSpeed * Time.deltaTime);
-            
             if (transform.position.x < -Screen.width) {
                 Destroy(gameObject);
             }
@@ -65,7 +63,6 @@ public class QuestionBubble : MonoBehaviour {
     public void SetSelected(bool selected) {
         isSelected = selected;
         backgroundImage.color = selected ? selectedColor : normalColor;
-        
         if (questionText != null) {
             questionText.color = selected ? selectedTextColor : normalTextColor;
         }

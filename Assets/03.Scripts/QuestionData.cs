@@ -5,8 +5,8 @@ public class QuestionData {
     public int correctAnswerIndex;
     
     public QuestionData(int index, string[] answers, int correct, string explain = "") {
-        questionIndex = index;
-        options = answers;
-        correctAnswerIndex = correct;
+        this.questionIndex = index;
+        this.options = answers;
+        this.correctAnswerIndex = correct;
     }
 } 

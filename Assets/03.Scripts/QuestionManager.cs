@@ -7,54 +7,53 @@ public class QuestionManager : MonoBehaviour {
     private LabManager labManager;
     private UIManager uiManager;
     private AudioManager audioManager;
-    
+
     [SerializeField] private GameObject questionBubblePrefab;
     [SerializeField] private Transform spawnPoint;
     [SerializeField] private QuestionOption[] questionOptions;
     [SerializeField] private Button[] optionButtons;
     [SerializeField] private float bubbleSpacing = 100f;
     [SerializeField] private float regenerateInterval = 20f;
-    
+
     private List<QuestionBubble> currentOptionBubbles = new List<QuestionBubble>();
     private int currentQuestionIndex = 0;
     private QuestionBubble selectedBubble;
     private int selectedOptionIndex = -1;
     private float nextRegenerateTime;
     private bool isQuestionActive = false;
-    
+
     private void Awake() {
         this.labManager = FindObjectOfType<LabManager>();
         this.uiManager = FindObjectOfType<UIManager>();
         this.audioManager = FindObjectOfType<AudioManager>();
     }
-    
+
     private void Start() {
-       this.uiManager.submitButton.onClick.AddListener(OnSubmitClicked);
+        this.uiManager.submitButton.onClick.AddListener(OnSubmitClicked);
         for (int i = 0; i < optionButtons.Length; i++) {
             int index = i;
             optionButtons[i].onClick.AddListener(() => SelectOption(index));
         }
     }
-    
+
     private void Update() {
         if (isQuestionActive && Time.time >= nextRegenerateTime) {
-            GenerateOptionBubbles();
+            this.GenerateOptionBubbles();
             nextRegenerateTime = Time.time + regenerateInterval;
-            
             if (GameManager.Instance != null) {
                 GameManager.Instance.DeductScore(5);
             }
         }
     }
-    
+
     public void InitializeQuestion(int questionIndex) {
-        isQuestionActive = false;
+        this.isQuestionActive = false;
         this.ClearCurrentBubbles();
-        currentQuestionIndex = questionIndex;
+        this.currentQuestionIndex = questionIndex;
         this.uiManager.submitButton.gameObject.SetActive(true);
         this.ShowCurrentQuestion();
     }
-    
+
     private QuestionOption GetQuestionByIndex(int questionIndex) {
         for (int i = 0; i < questionOptions.Length; i++) {
             if (questionOptions[i].questionIndex == questionIndex) {
@@ -63,9 +62,9 @@ public class QuestionManager : MonoBehaviour {
         }
         return null;
     }
-    
+
     private void GenerateOptionBubbles() {
-        ClearCurrentBubbles();
+        this.ClearCurrentBubbles();
         QuestionOption currentQuestion = GetQuestionByIndex(currentQuestionIndex);
         if (currentQuestion == null) return;
         for (int i = 0; i < currentQuestion.options.Length; i++) {
@@ -78,7 +77,7 @@ public class QuestionManager : MonoBehaviour {
             currentOptionBubbles.Add(bubble);
         }
     }
-    
+
     private void ClearCurrentBubbles() {
         foreach (QuestionBubble bubble in currentOptionBubbles) {
             if (bubble && bubble.gameObject) {
@@ -90,8 +89,8 @@ public class QuestionManager : MonoBehaviour {
         if (selectedOptionIndex != -1) {
         }
     }
-    
-    private void ShowCurrentQuestion() { 
+
+    private void ShowCurrentQuestion() {
         QuestionOption currentQuestion = GetQuestionByIndex(currentQuestionIndex);
         if (currentQuestion == null) return;
         for (int i = 0; i < optionButtons.Length && i < currentQuestion.options.Length; i++) {
@@ -111,7 +110,7 @@ public class QuestionManager : MonoBehaviour {
         this.GenerateOptionBubbles();
         this.nextRegenerateTime = Time.time + regenerateInterval;
     }
-    
+
     public void SelectQuestion(QuestionBubble bubble) {
         if (selectedBubble != null) {
             selectedBubble.SetSelected(false);
@@ -123,7 +122,7 @@ public class QuestionManager : MonoBehaviour {
             optionButtons[i].GetComponent<Image>().color = (i == selectedOptionIndex) ? Color.cyan : Color.white;
         }
     }
-    
+
     private void SelectOption(int index) {
         selectedOptionIndex = index;
         foreach (QuestionBubble bubble in currentOptionBubbles) {
@@ -137,16 +136,19 @@ public class QuestionManager : MonoBehaviour {
             optionButtons[i].GetComponent<Image>().color = (i == index) ? Color.cyan : Color.white;
         }
     }
-    
+
     private void OnSubmitClicked() {
         if (selectedOptionIndex == -1) return;
         QuestionOption currentQuestion = GetQuestionByIndex(currentQuestionIndex);
         if (currentQuestion == null) return;
         bool isCorrect = selectedOptionIndex == currentQuestion.correctAnswerIndex;
         if (isCorrect) {
-            this.audioManager.PlayPassClip(); 
+            this.audioManager.PlayPassClip();
             this.isQuestionActive = false;
             this.ClearCurrentBubbles();
+            if (this.currentQuestionIndex == 11) {
+                this.uiManager.HideTestDetailPanel();
+            }
             if (this.currentQuestionIndex == 13) {
                 this.labManager.HideWoodStick();
             }
@@ -169,8 +171,8 @@ public class QuestionManager : MonoBehaviour {
             }
         }
     }
-    
+
     private void ShowNextQuestion() {
         this.ShowCurrentQuestion();
     }
-} 
+}

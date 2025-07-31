@@ -19,6 +19,7 @@ public class UIManager : MonoBehaviour {
     [SerializeField] private TextMeshProUGUI finalTimeText;
     [SerializeField] private TextMeshProUGUI finalScoreText;
     public Button submitButton;
+    [SerializeField] private GameObject testDetailPanel;
 
     private AudioManager audioManager;
     private LabManager labManager; 
@@ -138,7 +139,16 @@ public class UIManager : MonoBehaviour {
     public void ShowFootPanel() {
         this.footPanel.SetActive(true);
     }
+    
     public void HideSubmitButton() {
         this.submitButton.gameObject.SetActive(false);
+    }
+    
+    public void ShowTestDetailPanel() {
+        this.testDetailPanel.SetActive(true);
+    }
+    
+    public void HideTestDetailPanel() {
+        this.testDetailPanel.gameObject.GetComponent<Animator>().SetTrigger("hide");
     }
 }

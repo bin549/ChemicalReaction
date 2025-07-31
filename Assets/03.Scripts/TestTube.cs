@@ -4,6 +4,7 @@ public class TestTube : MonoBehaviour {
     private LabManager labManager;
     private AudioManager audioManager;
     private QuestionManager questionManager;
+    private UIManager uiManager;
     [Header("Step01")]
     [SerializeField] private Beaker breaker;
     private MeshRenderer meshRenderer;
@@ -22,6 +23,7 @@ public class TestTube : MonoBehaviour {
         this.meshRenderer = this.GetComponent<MeshRenderer>();
         this.questionManager = FindObjectOfType<QuestionManager>();
         this.audioManager = FindObjectOfType<AudioManager>();
+        this.uiManager = FindObjectOfType<UIManager>();
     }
 
     private void OnMouseDown() {
@@ -41,6 +43,7 @@ public class TestTube : MonoBehaviour {
             this.labManager.aluminiumFallCount++;
             if (this.labManager.aluminiumFallCount == 2) {
                 this.labManager.isStep02Done = true;
+                this.uiManager.ShowTestDetailPanel();
                 this.tweezer.ShowTweezer();
                 this.tweezer.pickupTweezer.SetActive(false);
                 this.questionManager.InitializeQuestion(this.labManager.CurrentStepIndex+1);

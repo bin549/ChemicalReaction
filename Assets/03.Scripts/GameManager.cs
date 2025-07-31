@@ -2,11 +2,9 @@ using UnityEngine;
 
 public class GameManager : MonoBehaviour {
     public static GameManager Instance { get; private set; }
-    
     private AudioManager audioManager;
     private LabManager labManager;
     private UIManager uiManager;
-    
     private float startTime;
     private float elapsedTime;
     private int score = 100;
@@ -19,8 +17,7 @@ public class GameManager : MonoBehaviour {
         } else {
             Destroy(gameObject);
             return;
-        }
-        
+        }]
         this.audioManager = FindObjectOfType<AudioManager>();
         this.labManager = FindObjectOfType<LabManager>();
         this.uiManager = FindObjectOfType<UIManager>();
@@ -32,46 +29,46 @@ public class GameManager : MonoBehaviour {
         }
         if (isGameActive) {
             elapsedTime = Time.time - startTime;
-            if (uiManager != null) {
-                uiManager.UpdateTimeDisplay(GetFormattedTime());
+            if (this.uiManager != null) {
+                this.uiManager.UpdateTimeDisplay(GetFormattedTime());
             }
         }
     }
 
     public void StartTimer() {
-        startTime = Time.time;
-        elapsedTime = 0f;
-        isGameActive = true;
+        this.startTime = Time.time;
+        this.elapsedTime = 0f;
+        this.isGameActive = true;
     }
     
     public void StopTimer() {
-        isGameActive = false;
+        this.isGameActive = false;
     }
     
     public void DeductScore(int points = 5) {
-        score = Mathf.Max(0, score - points);
-        if (uiManager != null) {
-            uiManager.UpdateScoreDisplay(score);
+        this.score = Mathf.Max(0, this.score - points);
+        if (this.uiManager != null) {
+            this.uiManager.UpdateScoreDisplay(score);
         }
     }
     
     public string GetFormattedTime() {
-        int minutes = Mathf.FloorToInt(elapsedTime / 60);
-        int seconds = Mathf.FloorToInt(elapsedTime % 60);
+        int minutes = Mathf.FloorToInt(this.elapsedTime / 60);
+        int seconds = Mathf.FloorToInt(this.elapsedTime % 60);
         return string.Format("{0:00}:{1:00}", minutes, seconds);
     }
     
     public int GetScore() {
-        return score;
+        return this.score;
     }
     
     public float GetElapsedTime() {
-        return elapsedTime;
+        return this.elapsedTime;
     }
     
     public void ResetGame() {
-        score = 100;
-        elapsedTime = 0f;
-        isGameActive = false;
+        this.score = 100;
+        this.elapsedTime = 0f;
+        this.isGameActive = false;
     }
 }

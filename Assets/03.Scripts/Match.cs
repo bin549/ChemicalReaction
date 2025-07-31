@@ -14,7 +14,7 @@ public class Match : MonoBehaviour {
     }
 
     private void OnMouseDown() {
-        PickupMatchStick();
+        this.PickupMatchStick();
     }
     
     private void PickupMatchStick() {
