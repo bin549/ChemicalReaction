@@ -10,7 +10,6 @@ public class QuestionManager : MonoBehaviour {
     
     [SerializeField] private GameObject questionBubblePrefab;
     [SerializeField] private Transform spawnPoint;
-    [SerializeField] private Button submitButton;
     [SerializeField] private QuestionOption[] questionOptions;
     [SerializeField] private Button[] optionButtons;
     [SerializeField] private float bubbleSpacing = 100f;
@@ -30,7 +29,7 @@ public class QuestionManager : MonoBehaviour {
     }
     
     private void Start() {
-        submitButton.onClick.AddListener(OnSubmitClicked);
+       this.uiManager.submitButton.onClick.AddListener(OnSubmitClicked);
         for (int i = 0; i < optionButtons.Length; i++) {
             int index = i;
             optionButtons[i].onClick.AddListener(() => SelectOption(index));
@@ -52,7 +51,7 @@ public class QuestionManager : MonoBehaviour {
         isQuestionActive = false;
         this.ClearCurrentBubbles();
         currentQuestionIndex = questionIndex;
-        this.submitButton.gameObject.SetActive(true);
+        this.uiManager.submitButton.gameObject.SetActive(true);
         this.ShowCurrentQuestion();
     }
     
@@ -157,11 +156,9 @@ public class QuestionManager : MonoBehaviour {
         } else {
             this.uiManager.errorUI.gameObject.SetActive(true);
             this.audioManager.PlayErrorClip();
-            
             if (GameManager.Instance != null) {
                 GameManager.Instance.DeductScore(5);
             }
-            
             selectedOptionIndex = -1;
             selectedBubble = null;
             for (int i = 0; i < optionButtons.Length; i++) {

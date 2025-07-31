@@ -26,15 +26,10 @@ public class GameManager : MonoBehaviour {
         this.uiManager = FindObjectOfType<UIManager>();
     }
 
-    private void Start() {
-        Invoke(nameof(PlayStartAudio), 0.1f);
-    }
-
     private void Update() {
         if (Input.GetKeyDown(KeyCode.N)) {
             this.labManager.NextStep();
         }
-        
         if (isGameActive) {
             elapsedTime = Time.time - startTime;
             if (uiManager != null) {
@@ -43,10 +38,6 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    private void PlayStartAudio() {
-        this.audioManager.PlayStartClip();
-    }
-    
     public void StartTimer() {
         startTime = Time.time;
         elapsedTime = 0f;

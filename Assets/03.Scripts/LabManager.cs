@@ -34,6 +34,7 @@ public class LabManager : MonoBehaviour {
         this.currentStepIndex++;
         this.uiManager.ShowTipText(currentStepIndex);
         if (currentStepIndex == this.audioManager.TipAudioClips.Length) {
+            this.uiManager.HideSubmitButton();
             this.OnLabConclude();
             return;
         } 

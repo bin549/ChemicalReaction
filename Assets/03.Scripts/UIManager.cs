@@ -2,20 +2,24 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.UI;
 using TMPro;
-
+ 
 public class UIManager : MonoBehaviour {
     [SerializeField] private Image bgImage;
     [SerializeField] private Button startButton;
     [SerializeField] private Button endButton;
     [SerializeField] private GameObject[] rulePanels;
+    [SerializeField] private GameObject tipPanel;
     [SerializeField] private GameObject[] tipTexts;
     [SerializeField] private GameObject concludePanel;
     [SerializeField] private GameObject finishPanel;
+    [SerializeField] private GameObject bannerPanel;
+    [SerializeField] private GameObject footPanel;
     [SerializeField] private TextMeshProUGUI timeText;
     [SerializeField] private TextMeshProUGUI scoreText;
     [SerializeField] private TextMeshProUGUI finalTimeText;
     [SerializeField] private TextMeshProUGUI finalScoreText;
-    
+    public Button submitButton;
+
     private AudioManager audioManager;
     private LabManager labManager; 
     private int currentRulePanelIndex = 0;
@@ -29,6 +33,11 @@ public class UIManager : MonoBehaviour {
     private void Start() {
         UpdateTimeDisplay("00:00");
         UpdateScoreDisplay(100);
+        Invoke(nameof(PlayStartAudio), 0.1f);
+    }
+
+    public void PlayStartAudio() {
+        this.audioManager.PlayStartClip();
     }
 
     public void OnStartButtonClicked() {
@@ -36,10 +45,6 @@ public class UIManager : MonoBehaviour {
         this.startButton.gameObject.SetActive(false);
         this.ShowRulePanel(currentRulePanelIndex);
         this.audioManager.PlayRuleClip(currentRulePanelIndex);
-        
-        if (GameManager.Instance != null) {
-            GameManager.Instance.StartTimer();
-        }
     }
 
     public void OnRulePanelButtonClicked() {
@@ -47,6 +52,12 @@ public class UIManager : MonoBehaviour {
         this.ShowRulePanel(currentRulePanelIndex);
         this.audioManager.PlayRuleClip(currentRulePanelIndex);
         if (currentRulePanelIndex == this.audioManager.RuleAudioClips.Length) {
+            this.ShowBanelPanel();
+            this.ShowTipPanel();
+            this.ShowFootPanel();
+            if (GameManager.Instance != null) {
+                GameManager.Instance.StartTimer();
+            }
             this.labManager.NextStep();
             this.labManager.IsWorking = true;
         }
@@ -72,7 +83,6 @@ public class UIManager : MonoBehaviour {
     public void ShowConcludePanel() {
         if (GameManager.Instance != null) {
             GameManager.Instance.StopTimer();
-            
             if (finalTimeText != null) {
                 finalTimeText.text = "用时: " + GameManager.Instance.GetFormattedTime();
             }
@@ -80,7 +90,8 @@ public class UIManager : MonoBehaviour {
                 finalScoreText.text = "得分: " + GameManager.Instance.GetScore();
             }
         }
-        
+        this.bannerPanel.gameObject.GetComponent<Animator>().SetTrigger("hide");
+        this.footPanel.gameObject.GetComponent<Animator>().SetTrigger("hide");
         this.concludePanel.SetActive(true);
     }
 
@@ -100,7 +111,6 @@ public class UIManager : MonoBehaviour {
         if (GameManager.Instance != null) {
             GameManager.Instance.ResetGame();
         }
-        
         string sceneName = SceneManager.GetActiveScene().name;
         SceneManager.LoadScene(sceneName);
     }
@@ -115,5 +125,20 @@ public class UIManager : MonoBehaviour {
         if (scoreText != null) {
             scoreText.text = score.ToString();
         }
+    }
+
+    public void ShowTipPanel() {
+        this.tipPanel.SetActive(true);
+    }
+
+    public void ShowBanelPanel() {
+        this.bannerPanel.SetActive(true);
+    }
+
+    public void ShowFootPanel() {
+        this.footPanel.SetActive(true);
+    }
+    public void HideSubmitButton() {
+        this.submitButton.gameObject.SetActive(false);
     }
 }
